@@ -6,4 +6,11 @@
 # Due: 10/8/18
 # Assignment 1
 
+rowCount=0
+while read myLine
+do
+	echo "$myLine"
+	rowCount=`expr $rowCount + 1`
+done < $2
 
+echo "the row count is: $rowCount"
