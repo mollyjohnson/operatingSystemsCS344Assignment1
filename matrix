@@ -5,7 +5,11 @@
 # CS 344 Fall 2018
 # Due: 10/8/18
 # Assignment 1
+# All information used to implement this script is adapted
+# from the OSU CS 344 Fall 2018 lectures unless otherwise
+# specifically indicated.
 
+# 
 rowCount=0
 while read myLine
 do
