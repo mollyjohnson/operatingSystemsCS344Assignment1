@@ -11,10 +11,17 @@
 
 # 
 rowCount=0
+
+# loop through each row and increment counter variable to get num of rows
 while read myLine
 do
-	echo "$myLine"
 	rowCount=`expr $rowCount + 1`
 done < $2
 
-echo "the row count is: $rowCount"
+# -n added to prevent echo from printing newline
+# adapted from: https://www.linuxquestions.org/questions/linux-newbie-8/bash-echo-followed-by-command-on-the-same-line-4175447966/
+echo -n "$rowCount "
+
+
+# https://stackoverflow.com/questions/5761212/count-number-of-columns-in-bash/5761234
+head -2 $2 | tail -1 | tr '\t' '\n' | wc -l
