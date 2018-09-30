@@ -15,12 +15,21 @@
 # the file or stdin input is valid, it will print the number of rows, a space, and
 # then the number of columns to stdout and returns 0.
 
+# read in from stdin and copy to file if no file passed in, otherwise copy file to temp
+if [ $# == 1 ]
+then
+cat > tempInput$$
+elif [ $# == 2 ]
+then
+cp $2 tempInput$$
+fi
+
 # loop through each row and increment counter variable to get num of rows
 rowCount=0
 while read myLine
 do
 	rowCount=$(expr $rowCount + 1)
-done < $2
+done < tempInput$$ 
 
 # -n added to prevent echo from printing newline
 # adapted from: https://www.linuxquestions.org/questions/linux-newbie-8/bash-echo-followed-by-command-on-the-same-line-4175447966/
@@ -31,4 +40,4 @@ echo -n "$rowCount "
 # of newlines counted (wc is word count, and the -l option makes it only give the line count). Hence
 # the number of new lines counted + the original first line will equal the number of columns from the original file.
 # adapted from: https://stackoverflow.com/questions/5761212/count-number-of-columns-in-bash/5761234
-head -1 $2 | tr '\t' '\n' | wc -l
+head -1 tempInput$$ | tr '\t' '\n' | wc -l
