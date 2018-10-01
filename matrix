@@ -22,7 +22,8 @@ dims(){
 # then the number of columns to stdout and returns 0.
 
 # use the tempInputDims variable to hold path to file with passed in matrix (doesn't
-# matter if passed in from stdin or froma file)
+# matter if passed in from stdin or froma file). $$ added to end of temp file in order
+# to prevent any duplicate names being used again mistakenly
 tempInputDims="tempdims$$"
 if [ "$#" = "1" ]
 then
@@ -50,15 +51,26 @@ echo -n "$rowCount "
 head -1 $tempInputDims | tr '\t' '\n' | wc -l
 }
 
-if [ $# == 1 ]
+# 
+if [ "$#" = "1" ] || [ "$#" = "2" ]  
 then
-	$1 "${@:1}"
-elif [ $# == 2 ] 
+	if [ "$1" = "dims" ] || [ "$1" = "transpose" ] || [ "$1" = "mean" ]     
+	then
+		$1 "${@:1}"
+	else
+		echo "error: invalid number of arguments" 1>&2
+		exit 1
+	fi
+elif [ "$#" = "3" ]
 then
-	$1 "${@:1}"
-elif [ $# == 3 ]
-then
-	$1 "${@:2}"
+	if [ "$1" = "add" ] || [ "$1" = "multiply" ]  
+	then
+		$1 "${@:2}"
+	else
+		echo "error: invalid number of arguments" 1>&2
+		exit 1
+	fi
 else
-	echo "error"
+	echo "error: invalid number of arguments" 1>&2
+	exit 1
 fi
