@@ -39,6 +39,7 @@ while read myLine
 do
 	rowCount=$(expr $rowCount + 1)
 done < $tempInputDims
+
 # -n added to prevent echo from printing newline
 # adapted from: https://www.linuxquestions.org/questions/linux-newbie-8/bash-echo-followed-by-command-on-the-same-line-4175447966/
 echo -n "$rowCount "
@@ -51,7 +52,9 @@ echo -n "$rowCount "
 head -1 $tempInputDims | tr '\t' '\n' | wc -l
 }
 
-# 
+# check for correct number of arguments (1 or 2 for dims, transpose, and mean since they can also take stdin, and 3 for
+# add and multiply, since they must take in 2 files and can't use stdin). If there's an incorrect number of arguments,
+# send error message to stderr and return 1 (a non-zero number).
 if [ "$#" = "1" ] || [ "$#" = "2" ]  
 then
 	if [ "$1" = "dims" ] || [ "$1" = "transpose" ] || [ "$1" = "mean" ]     
