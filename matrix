@@ -49,4 +49,15 @@ echo -n "$rowCount "
 head -1 tempInput$$ | tr '\t' '\n' | wc -l
 }
 
-dims
+if [ $# == 1 ]
+then
+$1 "${@:1}"
+elif [ $# == 2 ] 
+then
+$1 "${@:1}"
+elif [ $# == 3 ]
+then
+$1 "${@:2}"
+else
+echo "error"
+fi
