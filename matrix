@@ -9,6 +9,12 @@
 # from the OSU CS 344 Fall 2018 lectures unless otherwise
 # specifically indicated.
 
+dims(){
+# NAME
+# dims - figure out dimensions of a given matrix
+# SYNOPSOS
+# calculate and print num of rows, a space, and then the num of columns of the matrix
+# DESCRIPTION
 # This is the dims function. This function will take a valid file as an argument or
 # accept input from stdin. If the file is not readable or too many/few arguments
 # are given, it will print an error message to stderr and return a value of 1. If
@@ -41,3 +47,6 @@ echo -n "$rowCount "
 # the number of new lines counted + the original first line will equal the number of columns from the original file.
 # adapted from: https://stackoverflow.com/questions/5761212/count-number-of-columns-in-bash/5761234
 head -1 tempInput$$ | tr '\t' '\n' | wc -l
+}
+
+dims
