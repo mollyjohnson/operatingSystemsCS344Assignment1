@@ -19,7 +19,7 @@ dims(){
 # accept input from stdin. If the file is not readable or too many/few arguments
 # are given, it will print an error message to stderr and return a value of 1. If
 # the file or stdin input is valid, it will print the number of rows, a space, and
-# then the number of columns to stdout and returns 0.
+# then the number of columns to stdout and returns 0 (0 is returned automatically).
 
 # use the tempInputDims variable to hold path to file with passed in matrix (doesn't
 # matter if passed in from stdin or froma file). $$ added to end of temp file in order
