@@ -52,6 +52,46 @@ echo -n "$rowCount "
 head -1 $tempInputDims | tr '\t' '\n' | wc -l
 }
 
+transpose(){
+# NAME
+# 
+# SYNOPSOS
+# 
+# DESCRIPTION
+# 
+	echo "transpose function called"
+}
+
+mean(){
+# NAME
+# 
+# SYNOPSOS
+# 
+# DESCRIPTION
+# 
+	echo "mean function called"	
+}
+
+add(){
+# NAME
+# 
+# SYNOPSOS
+# 
+# DESCRIPTION
+# 
+	echo "add function called"
+}
+
+multiply(){
+# NAME
+# 
+# SYNOPSOS
+# 
+# DESCRIPTION
+# 
+	echo "multiply function called"
+}
+
 # check for correct number of arguments (1 or 2 for dims, transpose, and mean since they can also take stdin, and 3 for
 # add and multiply, since they must take in 2 files and can't use stdin). If there's an incorrect number of arguments,
 # send error message to stderr and return 1 (a non-zero number).
