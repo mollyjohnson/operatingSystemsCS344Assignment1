@@ -51,12 +51,13 @@ echo -n "$rowCount "
 # adapted from: https://stackoverflow.com/questions/5761212/count-number-of-columns-in-bash/5761234
 head -1 $tempInputDims | tr '\t' '\n' | wc -l
 
-#
+# check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
+# This file checking is adapted from: 
+# https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable/558990 
 if [[ -a tempdims$$ ]]
 then
 	rm -f tempdims$$
 fi
-
 }
 
 transpose(){
@@ -102,7 +103,9 @@ multiply(){
 # check for correct number of arguments (1 or 2 for dims, transpose, and mean since they can also take stdin, and 3 for
 # add and multiply, since they must take in 2 files and can't use stdin). If there's an incorrect number of arguments,
 # or if a file or files passed in is either unreadable or nonexistent, send error message to stderr and return 1 
-# (a non-zero number), otherwise call the appropriate function.
+# (a non-zero number), otherwise call the appropriate function. -s means to check if the file exists and is non-empty,
+# and -r checks that the file is readable. This file checking is adapted from: 
+# https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable/558990
 if [ "$#" = "1" ]
 then
 	if [ "$1" = "dims" ] || [ "$1" = "transpose" ] || [ "$1" = "mean" ]     
