@@ -50,6 +50,13 @@ echo -n "$rowCount "
 # the number of new lines counted + the original first line will equal the number of columns from the original file.
 # adapted from: https://stackoverflow.com/questions/5761212/count-number-of-columns-in-bash/5761234
 head -1 $tempInputDims | tr '\t' '\n' | wc -l
+
+#
+if [[ -a tempdims$$ ]]
+then
+	rm -f tempdims$$
+fi
+
 }
 
 transpose(){
@@ -94,7 +101,8 @@ multiply(){
 
 # check for correct number of arguments (1 or 2 for dims, transpose, and mean since they can also take stdin, and 3 for
 # add and multiply, since they must take in 2 files and can't use stdin). If there's an incorrect number of arguments,
-# send error message to stderr and return 1 (a non-zero number), otherwise call the appropriate function.
+# or if a file or files passed in is either unreadable or nonexistent, send error message to stderr and return 1 
+# (a non-zero number), otherwise call the appropriate function.
 if [ "$#" = "1" ]
 then
 	if [ "$1" = "dims" ] || [ "$1" = "transpose" ] || [ "$1" = "mean" ]     
