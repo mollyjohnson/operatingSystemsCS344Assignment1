@@ -123,7 +123,7 @@ then
 		then
 			$1 "${@:1}"
 		else
-			echo "error: file does not exist or is not readble" 1>&2
+			echo "error: file does not exist or is not readable" 1>&2
 			exit 1
 		fi
 	else
