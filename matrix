@@ -121,7 +121,61 @@ mean(){
 # 
 # DESCRIPTION
 # 
-	echo "mean function called"	
+
+# use the tempInputTrans variable to hold path to file with passed in matrix (doesn't
+# matter if passed in from stdin or froma file). $$ added to end of temp file in order
+# to prevent any duplicate names being used again mistakenly
+tempInputMean="tempmean$$"
+if [ "$#" = "1" ]
+then
+	cat > "$tempInputMean"
+elif [ "$#" = "2" ]
+then
+	tempInputMean=$2
+fi
+
+# store the number of columns in the cols variable.
+# head normally reads in first 10 lines of text from a file ($2). -1 added to make head
+# only read in the first row. All tabs are then transformed into newlines, and the number
+# of newlines counted (wc is word count, and the -l option makes it only give the line count). Hence
+# the number of new lines counted + the original first line will equal the number of columns from the original file.
+# adapted from: https://stackoverflow.com/questions/5761212/count-number-of-columns-in-bash/5761234
+# storing command output in a variable adapted from:
+# https://unix.stackexchange.com/questions/122014/setting-output-of-a-command-to-a-variable 
+columns="$(head -1 $tempInputMean | tr '\t' '\n' | wc -l)"
+
+# alternate for loop format adapted from:
+# https://www.cyberciti.biz/faq/bash-for-loop/
+# using cut to take a column from the file and paste each column as a new line adapted from:
+# https://www.thelinuxrain.com/articles/transposing-rows-and-columns-3-methods
+# details about the cut and command and paste commands adapted from:
+# https://www.mkssoftware.com/docs/man1/cut.1.asp and https://www.mkssoftware.com/docs/man1/paste.1.asp
+# -fn where n is an integer tells cut to cut in field delimiter mode, cutting each column where n is the column number
+# -s tells paste to concatenate all lines from each input file together on the single output line, in this
+# case to put the values for each column from the file into a new row, hence transposing the elements in the file
+# temp file created for new transposed matrix prior to summation
+tempRowFile="temprow$$"
+
+for (( h=1; h <= columns; h++ ))
+do
+	cut -f"$h" $tempInputMean | paste -s >> $tempRowFile
+done
+
+# check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
+# This file checking is adapted from: 
+# https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable/558990 
+if [[ -a tempmean$$ ]]
+then
+	rm -f tempmean$$
+fi
+
+# check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
+# This file checking is adapted from: 
+# https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable/558990 
+if [[ -a temprow$$ ]]
+then
+	rm -f temprow$$
+fi
 }
 
 add(){
