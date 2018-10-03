@@ -91,8 +91,19 @@ fi
 # https://unix.stackexchange.com/questions/122014/setting-output-of-a-command-to-a-variable 
 cols="$(head -1 $tempInputTrans | tr '\t' '\n' | wc -l)"
 
-for i in {1..$cols}; do cut -f"$i" $tempInputTrans | paste -s; done
-# cut -f1 $tempInputTrans | paste -s
+# alternate for loop format adapted from:
+# https://www.cyberciti.biz/faq/bash-for-loop/
+# using cut to take a column from the file and paste each column as a new line adapted from:
+# https://www.thelinuxrain.com/articles/transposing-rows-and-columns-3-methods
+# details about the cut and command and paste commands adapted from:
+# https://www.mkssoftware.com/docs/man1/cut.1.asp and https://www.mkssoftware.com/docs/man1/paste.1.asp
+# -fn where n is an integer tells cut to cut in field delimiter mode, cutting each column where n is the column number
+# -s tells paste to concatenate all lines from each input file together on the single output line, in this
+# case to put the values for each column from the file into a new row, hence transposing the elements in the file
+for (( i=1; i <= cols; i++ ))
+do
+	cut -f"$i" $tempInputTrans | paste -s
+done
 
 # check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
 # This file checking is adapted from: 
