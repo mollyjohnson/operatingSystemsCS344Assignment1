@@ -161,6 +161,28 @@ do
 	cut -f"$h" $tempInputMean | paste -s >> $tempRowFile
 done
 
+# -a -r -s -w used to check that the tempRowFile is valid. -a checks that the file exists,
+# -r checks that the file is readable, -s checks that the file isn't empty, and -w checks
+# that the file is writable. Adapted from:
+# https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable
+# Method for summing a row of numbers adapted from:
+# https://stackoverflow.com/questions/33006845/how-to-sum-a-row-of-numbers-from-text-file-bash-shell-scripting
+if [[ -a temprow$$ && -r temprow$$ && -s temprow$$ && -w temprow$$ ]] 
+then
+	while read k
+	do
+	sum=0
+	for num in $k
+	do
+		(( sum = sum + num ))
+	done
+	echo -n -e "$sum\t"
+done < $tempRowFile
+else
+	echo "error: file not valid" 1>&2
+	exit 1
+fi
+
 # check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
 # This file checking is adapted from: 
 # https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable/558990 
