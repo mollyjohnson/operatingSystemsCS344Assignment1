@@ -91,6 +91,9 @@ fi
 # https://unix.stackexchange.com/questions/122014/setting-output-of-a-command-to-a-variable 
 cols="$(head -1 $tempInputTrans | tr '\t' '\n' | wc -l)"
 
+for i in {1..$cols}; do cut -f"$i" $tempInputTrans | paste -s; done
+# cut -f1 $tempInputTrans | paste -s
+
 # check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
 # This file checking is adapted from: 
 # https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable/558990 
