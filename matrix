@@ -75,14 +75,21 @@ transpose(){
 tempInputTrans="temptrans$$"
 if [ "$#" = "1" ]
 then
-	cat > "$tempInputTranss"
+	cat > "$tempInputTrans"
 elif [ "$#" = "2" ]
 then
 	tempInputTrans=$2
 fi
 
-# 
-
+# store the number of columns in the cols variable.
+# head normally reads in first 10 lines of text from a file ($2). -1 added to make head
+# only read in the first row. All tabs are then transformed into newlines, and the number
+# of newlines counted (wc is word count, and the -l option makes it only give the line count). Hence
+# the number of new lines counted + the original first line will equal the number of columns from the original file.
+# adapted from: https://stackoverflow.com/questions/5761212/count-number-of-columns-in-bash/5761234
+# storing command output in a variable adapted from:
+# https://unix.stackexchange.com/questions/122014/setting-output-of-a-command-to-a-variable 
+cols="$(head -1 $tempInputTrans | tr '\t' '\n' | wc -l)"
 
 # check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
 # This file checking is adapted from: 
