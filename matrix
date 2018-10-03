@@ -62,12 +62,35 @@ fi
 
 transpose(){
 # NAME
-# 
+# transpose - reflect matrix elements along the diagonal 
 # SYNOPSOS
-# 
+# transpose matrix elements so that an MxN matrix becomes an NxM matrix, with the diagonal 
+# elements remaining unchanged.
 # DESCRIPTION
 # 
-	echo "transpose function called"
+
+# use the tempInputTrans variable to hold path to file with passed in matrix (doesn't
+# matter if passed in from stdin or froma file). $$ added to end of temp file in order
+# to prevent any duplicate names being used again mistakenly
+tempInputTrans="temptrans$$"
+if [ "$#" = "1" ]
+then
+	cat > "$tempInputTranss"
+elif [ "$#" = "2" ]
+then
+	tempInputTrans=$2
+fi
+
+# 
+
+
+# check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
+# This file checking is adapted from: 
+# https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable/558990 
+if [[ -a temptrans$$ ]]
+then
+	rm -f temptrans$$
+fi
 }
 
 mean(){
