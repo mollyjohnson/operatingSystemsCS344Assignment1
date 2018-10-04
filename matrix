@@ -162,6 +162,7 @@ done
 #
 whileCount=1
 tempFileRows="$(cat $tempRowFile | wc -l | tr -d '\n')"
+origFileRows="$(cat $tempInputMean | wc -l | tr -d '\n')"
 
 # -a -r -s -w used to check that the tempRowFile is valid. -a checks that the file exists,
 # -r checks that the file is readable, -s checks that the file isn't empty, and -w checks
