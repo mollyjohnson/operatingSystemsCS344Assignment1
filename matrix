@@ -33,16 +33,15 @@ then
 	tempInputDims=$2
 fi
 
-# loop through each row and increment counter variable to get num of rows
-rowCount=0
-while read myLine
-do
-	rowCount=$(expr $rowCount + 1)
-done < $tempInputDims
-
-# -n added to prevent echo from printing newline
-# adapted from: https://www.linuxquestions.org/questions/linux-newbie-8/bash-echo-followed-by-command-on-the-same-line-4175447966/
-echo -n "$rowCount "
+# use wc (word count) with the -l option to count the number of lines (i.e. rows) in the file.
+# to prevent a newline from being output after this to stdout, use tr (transform) with the -d
+# option and the newline character, as this will remove the newline character that would normally
+# be sent to stdout after the line count is printed via wc -l.
+# using wc -l to count lines (i.e. rows) in a file adapted from:
+# https://stackoverflow.com/questions/3137094/how-to-count-lines-in-a-document and
+# https://superuser.com/questions/249307/avoid-printing-line-breaks-in-shell-script
+cat $tempInputDims | wc -l | tr -d '\n'
+echo -n " "
 
 # head normally reads in first 10 lines of text from a file ($2). -1 added to make head
 # only read in the first row. All tabs are then transformed into newlines, and the number
