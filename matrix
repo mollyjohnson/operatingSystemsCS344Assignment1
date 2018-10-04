@@ -183,9 +183,13 @@ then
 
 		if [ $whileCount -lt  $tempFileRows ]
 		then
-			echo -n -e "$sum\t"
+			#echo -n -e "$sum\t"
+			mean=$(( ($sum + ($origFileRows/2)*( ($sum>0)*2-1 )) / $origFileRows ))
+			echo -n -e "$mean\t"
 		else
-			echo "$sum"
+			#echo "$sum"
+			mean=$(( ($sum + ($origFileRows/2)*( ($sum>0)*2-1 )) / $origFileRows ))
+			echo "$mean"
 		fi
 
 		(( whileCount = whileCount + 1 ))
