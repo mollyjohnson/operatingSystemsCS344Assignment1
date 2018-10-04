@@ -171,12 +171,12 @@ then
 	while read k
 	do
 		sum=0
-	for num in $k
-	do
-		(( sum = sum + num ))
-	done
+		for num in $k
+		do
+			(( sum = sum + num ))
+		done
 		echo -n -e "$sum\t"
-done < $tempRowFile
+	done < $tempRowFile
 else
 	echo "error: file not valid" 1>&2
 	exit 1
