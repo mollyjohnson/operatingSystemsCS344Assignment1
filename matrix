@@ -171,6 +171,7 @@ tempFileRows="$(cat $tempRowFile | wc -l | tr -d '\n')"
 # https://stackoverflow.com/questions/33006845/how-to-sum-a-row-of-numbers-from-text-file-bash-shell-scripting
 if [[ -a temprow$$ && -r temprow$$ && -s temprow$$ && -w temprow$$ ]] 
 then
+	#
 	while read k
 	do
 		sum=0
