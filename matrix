@@ -154,11 +154,14 @@ columns="$(head -1 $tempInputMean | tr '\t' '\n' | wc -l)"
 # case to put the values for each column from the file into a new row, hence transposing the elements in the file
 # temp file created for new transposed matrix prior to summation
 tempRowFile="temprow$$"
-
 for (( h=1; h <= columns; h++ ))
 do
 	cut -f"$h" $tempInputMean | paste -s >> $tempRowFile
 done
+
+#
+whileCount=1
+tempFileRows="$(cat $tempRowFile | wc -l | tr -d '\n')"
 
 # -a -r -s -w used to check that the tempRowFile is valid. -a checks that the file exists,
 # -r checks that the file is readable, -s checks that the file isn't empty, and -w checks
@@ -175,7 +178,15 @@ then
 		do
 			(( sum = sum + num ))
 		done
-		echo -n -e "$sum\t"
+
+		if [ $whileCount -lt  $tempFileRows ]
+		then
+			echo -n -e "$sum\t"
+		else
+			echo "$sum"
+		fi
+
+		(( whileCount = whileCount + 1 ))
 	done < $tempRowFile
 else
 	echo "error: file not valid" 1>&2
