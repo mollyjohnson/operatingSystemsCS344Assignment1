@@ -244,6 +244,7 @@ addWhileCount=1
 while read leftMatrixLine <&3 && read rightMatrixLine <&4
 do
 
+
 	(( addWhileCount = addWhileCount +1 ))
 done 3<"$leftAddInput" 4<"$rightAddInput"
 
