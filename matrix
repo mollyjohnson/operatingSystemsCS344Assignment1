@@ -277,6 +277,29 @@ else
 	echo "error: file not valid" 1>&2
 fi
 
+addCounter=0
+if [[ -a tempaddcut$$ && -r tempaddcut$$ && -s tempaddcut$$ && -w tempaddcut$$ ]] 
+then
+	#
+	while read myLine
+	do
+		addSum=0
+		for addNum in $myLine
+		do
+			if [ $addCounter -lt 2 ]
+			then
+				(( addSum = addSum + addNum ))
+			else
+				
+			fi
+			(( addCounter = addCounter + 1 ))
+		done
+	done < $tempAddCut
+else
+	echo "error: file not valid" 1>&2
+	exit 1
+fi
+
 #
 if [[ -a leftaddin$$ ]]
 then
