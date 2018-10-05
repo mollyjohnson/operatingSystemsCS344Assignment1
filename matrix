@@ -243,7 +243,29 @@ fi
 addWhileCount=1
 while read leftMatrixLine <&3 && read rightMatrixLine <&4
 do
+	for num1 in $leftMatrixLine && $rightMatrixLine
+	do
+		leftNum=$num1
+		rightNum=$num1
+		echo "num is: $num1"
+		echo "left num is: $leftNum"
+		echo "right num is: $rightNum1"
+		echo "num is: $num1"
+	done
+	#for num2 in $rightMatrixLine
+	#do
+	#	rightNum=$num2
+	#	echo "right num is: $num2"
+	#done
+	
+	#addSum=$(( $leftNum + $rightNum))
 
+	#if [ $addWhileCount -lt $leftRowsAdd ]
+	#then
+	#	echo -n -e "$addSum\t"
+	#else
+	#	echo "$addSum"
+	#fi
 
 	(( addWhileCount = addWhileCount +1 ))
 done 3<"$leftAddInput" 4<"$rightAddInput"
