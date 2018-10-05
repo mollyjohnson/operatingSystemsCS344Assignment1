@@ -221,7 +221,36 @@ add(){
 # 
 # DESCRIPTION
 # 
-	echo "add function called"
+
+leftAddInput="leftaddin$$"
+rightAddInput="righdaddin$$"
+leftAddInput=$1
+rightAddInput=$2
+
+leftColsAdd="$(head -1 $leftAddInput | tr '\t' '\n' | wc -l)"
+leftRowsAdd="$(cat $leftAddInput | wc -l | tr -d '\n')"
+
+rightColsAdd="$(head -1 $rightAddInput | tr '\t' '\n' | wc -l)"
+rightRowsAdd="$(cat $rightAddInput | wc -l | tr -d '\n')"
+
+if [ $leftColsAdd -ne  $rightColsAdd ] || [ $leftRowsAdd -ne $rightRowsAdd ]
+then
+	echo "error: mismatched matrices entered" 1>&2
+	exit 1
+fi
+
+#
+if [[ -a leftaddin$$ ]]
+then
+	rm -f leftaddin$$
+fi
+
+#
+if [[ -a rightaddin$$ ]]
+then
+	rm -f rightaddin$$
+fi
+
 }
 
 multiply(){
@@ -231,7 +260,35 @@ multiply(){
 # 
 # DESCRIPTION
 # 
-	echo "multiply function called"
+
+leftMultInput="leftmultin$$"
+rightMultInput="righdmultin$$"
+leftMultInput=$1
+rightMultInput=$2
+
+leftColsMult="$(head -1 $leftMultInput | tr '\t' '\n' | wc -l)"
+leftRowsMult="$(cat $leftMultInput | wc -l | tr -d '\n')"
+
+rightColsMult="$(head -1 $rightMultInput | tr '\t' '\n' | wc -l)"
+rightRowsMult="$(cat $rightMultInput | wc -l | tr -d '\n')"
+
+if [ $leftColsMult -ne  $rightColsMult ] || [ $leftRowsMult -ne $rightRowsMult ]
+then
+	echo "error: mismatched matrices entered" 1>&2
+	exit 1
+fi
+
+#
+if [[ -a leftmultin$$ ]]
+then
+	rm -f leftmultin$$
+fi
+
+#
+if [[ -a rightmultin$$ ]]
+then
+	rm -f rightmultin$$
+fi
 }
 
 # check for correct number of arguments (1 or 2 for dims, transpose, and mean since they can also take stdin, and 3 for
