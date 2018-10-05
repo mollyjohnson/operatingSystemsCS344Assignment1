@@ -240,18 +240,42 @@ then
 fi
 
 #
-addWhileCount=1
+#addWhileCount=1
 forLoopCount=1
+tempAddFile="tempadd$$"
 while read leftMatrixLine <&3 && read rightMatrixLine <&4
 do
 	# https://www.cyberciti.biz/faq/bash-for-loop/
-	for num1 in $leftMatrixLine $rightMatrixLine
+	for num in $leftMatrixLine $rightMatrixLine
 	do
+		#echo "for loop count is: $forLoopCount"
+		#echo  "num is: $num"
+
+		if [ $forLoopCount -lt $leftColsAdd ]
+		then
+			echo -n -e "$num\t" >> $tempAddFile
+		elif [ $forLoopCount -eq $leftColsAdd ]
+		then
+			echo "$num" >> $tempAddFile
+			forLoopCount=0
+		fi
 		(( forLoopCount = forLoopCount + 1 ))
 	done
-
-	(( addWhileCount = addWhileCount + 1 ))
+	#echo "while loop count is: $addWhileCount"
+	#(( addWhileCount = addWhileCount + 1 ))
 done 3<"$leftAddInput" 4<"$rightAddInput"
+
+tempAddCols="$(head -1 $tempAddFile | tr '\t' '\n' | wc -l)"
+tempAddCut="tempaddcut$$"
+if [[ -a tempadd$$ && -r tempadd$$ && -s tempadd$$ && -w tempadd$$ ]]  
+then
+	for (( k=1; k <= $tempAddCols ; k++ ))
+	do
+		cut -f"$k" $tempAddFile | paste -s >> $tempAddCut
+	done
+else
+	echo "error: file not valid" 1>&2
+fi
 
 #
 if [[ -a leftaddin$$ ]]
@@ -264,6 +288,18 @@ if [[ -a rightaddin$$ ]]
 then
 	rm -f rightaddin$$
 fi
+
+#
+#if [[ -a tempadd$$ ]]
+#then
+#	rm -f tempadd$$
+#fi
+
+#
+#if [[ -a tempaddcut$$ ]]
+#then
+#	rm -f tempaddcut$$
+#fi
 
 }
 
