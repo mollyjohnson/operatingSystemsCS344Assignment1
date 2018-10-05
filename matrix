@@ -173,10 +173,10 @@ origFileRows="$(cat $tempInputMean | wc -l | tr -d '\n')"
 if [[ -a temprow$$ && -r temprow$$ && -s temprow$$ && -w temprow$$ ]] 
 then
 	#
-	while read sumFile
+	while read sumLine
 	do
 		sum=0
-		for num in $sumFile
+		for num in $sumLine
 		do
 			(( sum = sum + num ))
 		done
