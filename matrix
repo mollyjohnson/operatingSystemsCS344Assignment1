@@ -419,6 +419,18 @@ do
 	done
 done 3<"$leftMultInput" 4<"$transposedRightInput"
 
+#tempMultCols="$(head -1 $tempMultCombinedFile | tr '\t' '\n' | wc -l)"
+#tempMultCut="tempmultcut$$"
+#if [[ -a tempmultcombine$$ && -r tempmultcombine$$ && -s tempmultcombine$$ && -w tempmultcombine$$ ]]
+#then
+#	for (( p=1; p <= $tempMultCols ; p++ ))
+#	do
+#		cut -f"$p" $tempMultCombinedFile | paste -s >> $tempMultCut
+#	done
+#else
+#	echo "error: file not valid" 1>&2
+#fi
+
 #
 #if [[ -a transrightinput$$ ]]
 #then
@@ -441,6 +453,13 @@ done 3<"$leftMultInput" 4<"$transposedRightInput"
 #if [[ -a tempmultcombine$$ ]]
 #then
 #	rm -f tempmultcombine$$
+#fi
+
+#
+#if [[ -a tempmultcut$$ ]]
+#then
+#	rm -f tempmultcut$$
+#fi
 }
 
 # check for correct number of arguments (1 or 2 for dims, transpose, and mean since they can also take stdin, and 3 for
