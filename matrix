@@ -399,7 +399,7 @@ do
 	cut -f"$g" $rightMultInput | paste -s >> $transposedRightInput
 done
 
-
+# 
 
 #
 #if [[ -a transrightinput$$ ]]
