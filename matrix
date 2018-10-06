@@ -277,7 +277,10 @@ else
 	echo "error: file not valid" 1>&2
 fi
 
+tempOutputWithoutTransform="tempnotransform$$"
+
 addCounter=0
+colPrintCount=1
 if [[ -a tempaddcut$$ && -r tempaddcut$$ && -s tempaddcut$$ && -w tempaddcut$$ ]] 
 then
 	#
@@ -289,16 +292,43 @@ then
 			if [ $addCounter -lt 2 ]
 			then
 				(( addSum = addSum + addNum ))
+				(( addCounter = addCounter + 1 ))
 			else
 				
+				(( addSum = addNum ))
+				(( addCounter = 1 ))
 			fi
-			(( addCounter = addCounter + 1 ))
+
+			if [ $addCounter -eq 2 ]
+			then
+				if [ $colPrintCount -lt $leftRowsAdd ]
+				then
+					echo -e -n "$addSum\t" >> $tempOutputWithoutTransform
+				else
+					echo "$addSum" >> $tempOutputWithoutTransform 
+				fi
+				(( colPrintCount = colPrintCount + 1 ))
+			fi
 		done
+		(( addCounter = 0 ))
+		(( addSum = 0 ))
+		(( colPrintCount = 1 ))
 	done < $tempAddCut
 else
 	echo "error: file not valid" 1>&2
 	exit 1
 fi
+
+#
+tempOutputWithTransform="tempwtransform$$"
+tempWithoutTransformCols="$(head -1 $tempOutputWithoutTransform | tr '\t' '\n' | wc -l)"
+
+for (( m=1; m <= $tempWithoutTransformCols; m++ ))
+do
+	cut -f"$m" $tempOutputWithoutTransform | paste -s >> $tempOutputWithTransform
+done
+
+cat $tempOutputWithTransform
 
 #
 if [[ -a leftaddin$$ ]]
@@ -313,17 +343,26 @@ then
 fi
 
 #
-#if [[ -a tempadd$$ ]]
-#then
-#	rm -f tempadd$$
-#fi
+if [[ -a tempadd$$ ]]
+then
+	rm -f tempadd$$
+fi
 
 #
-#if [[ -a tempaddcut$$ ]]
-#then
-#	rm -f tempaddcut$$
-#fi
+if [[ -a tempaddcut$$ ]]
+then
+	rm -f tempaddcut$$
+fi
 
+if [[ -a tempnotransform$$ ]]
+then
+	rm -f tempnotransform$$
+fi
+
+if [[ -a tempwtransform$$ ]]
+then
+	rm -f tempwtransform$$
+fi
 }
 
 multiply(){
