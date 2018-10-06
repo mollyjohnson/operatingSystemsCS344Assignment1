@@ -384,25 +384,40 @@ leftRowsMult="$(cat $leftMultInput | wc -l | tr -d '\n')"
 rightColsMult="$(head -1 $rightMultInput | tr '\t' '\n' | wc -l)"
 rightRowsMult="$(cat $rightMultInput | wc -l | tr -d '\n')"
 
-if [ $leftColsMult -ne  $rightColsMult ] || [ $leftRowsMult -ne $rightRowsMult ]
+# if [ $leftColsMult -ne  $rightColsMult ] || [ $leftRowsMult -ne $rightRowsMult ]
+if [ $leftColsMult -ne $rightRowsMult ]
 then
 	echo "error: mismatched matrices entered" 1>&2
 	exit 1
 fi
 
+transposedRightInput="transrightinput$$"
+
+#
+for (( g=1; g <= $rightColsMult; g++ ))
+do
+	cut -f"$g" $rightMultInput | paste -s >> $transposedRightInput
+done
+
 
 
 #
-if [[ -a leftmultin$$ ]]
-then
-	rm -f leftmultin$$
-fi
+#if [[ -a transrightinput$$ ]]
+#then
+#	rm -f transrightinput$$
+#fi
 
 #
-if [[ -a rightmultin$$ ]]
-then
-	rm -f rightmultin$$
-fi
+#if [[ -a leftmultin$$ ]]
+#then
+#	rm -f leftmultin$$
+#fi
+
+#
+#if [[ -a rightmultin$$ ]]
+#then
+#	rm -f rightmultin$$
+#fi
 }
 
 # check for correct number of arguments (1 or 2 for dims, transpose, and mean since they can also take stdin, and 3 for
