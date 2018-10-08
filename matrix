@@ -400,24 +400,24 @@ do
 done
 
 # 
-multForLoopCount=1
-tempMultCombinedFile="tempmultcombine$$"
-while read leftMultMatrixLine <&3 && read rightMultMatrixLine <&4
-do
+#multForLoopCount=1
+#tempMultCombinedFile="tempmultcombine$$"
+#while read leftMultMatrixLine <&3 && read rightMultMatrixLine <&4
+#do
 	#
-	for multNum in $leftMultMatrixLine $rightMultMatrixLine
-	do
-		if [ $multForLoopCount -lt $leftColsMult ]
-		then
-			echo -n -e "$multNum\t" >> $tempMultCombinedFile
-		elif [ $multForLoopCount -eq $leftColsMult ]
-		then
-			echo "$multNum" >> $tempMultCombinedFile
-			multForLoopCount=0
-		fi
-		(( multForLoopCount = multForLoopCount + 1 ))
-	done
-done 3<"$leftMultInput" 4<"$transposedRightInput"
+#	for multNum in $leftMultMatrixLine $rightMultMatrixLine
+#	do
+#		if [ $multForLoopCount -lt $leftColsMult ]
+#		then
+#			echo -n -e "$multNum\t" >> $tempMultCombinedFile
+#		elif [ $multForLoopCount -eq $leftColsMult ]
+#		then
+#			echo "$multNum" >> $tempMultCombinedFile
+#			multForLoopCount=0
+#		fi
+#		(( multForLoopCount = multForLoopCount + 1 ))
+#	done
+#done 3<"$leftMultInput" 4<"$transposedRightInput"
 
 #tempMultCols="$(head -1 $tempMultCombinedFile | tr '\t' '\n' | wc -l)"
 #tempMultCut="tempmultcut$$"
@@ -432,10 +432,29 @@ done 3<"$leftMultInput" 4<"$transposedRightInput"
 #fi
 
 #
-#if [[ -a transrightinput$$ ]]
-#then
-#	rm -f transrightinput$$
-#fi
+multSum=0
+multResultsFile="multresults$$"
+tempMult=0
+wordCounter=0
+transColCount="$(head -1 $transposedRightInput | tr '\t' '\n' | wc -l)"
+rightNumMult=1
+while read leftMatrixLineMult <&3 && read rightMatrixLineMult <&4
+do
+	for leftNumMult in $leftMatrixLineMult
+	do
+	echo "left num is: $leftNumMult"
+	echo -n "right num is: "
+	echo $rightMatrixLineMult | cut -d" " -f"$rightNumMult"
+
+	(( rightNumMult = rightNumMult + 1 ))
+	done
+done 3<"$leftMultInput" 4<"$transposedRightInput"
+
+#
+if [[ -a transrightinput$$ ]]
+then
+	rm -f transrightinput$$
+fi
 
 #
 #if [[ -a leftmultin$$ ]]
@@ -459,6 +478,12 @@ done 3<"$leftMultInput" 4<"$transposedRightInput"
 #if [[ -a tempmultcut$$ ]]
 #then
 #	rm -f tempmultcut$$
+#fi
+
+#
+#if [[ -a multresults$$ ]]
+#then
+#	rm -f multresults$$
 #fi
 }
 
