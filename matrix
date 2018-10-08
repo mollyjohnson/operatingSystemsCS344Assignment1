@@ -437,17 +437,17 @@ multResultsFile="multresults$$"
 tempMult=0
 wordCounter=0
 transColCount="$(head -1 $transposedRightInput | tr '\t' '\n' | wc -l)"
-rightNumMult=1
+
+i=1
 while read leftMatrixLineMult <&3 && read rightMatrixLineMult <&4
 do
+	newLine="$rightMatrixLineMult"
 	for leftNumMult in $leftMatrixLineMult
 	do
-	echo "left num is: $leftNumMult"
-	echo -n "right num is: "
-	echo $rightMatrixLineMult | cut -d" " -f"$rightNumMult"
-
-	(( rightNumMult = rightNumMult + 1 ))
+		echo -e -n $newLine | cut -d" " -f"$i"
+		(( i = i + 1 ))
 	done
+	(( i = 1 ))
 done 3<"$leftMultInput" 4<"$transposedRightInput"
 
 #
