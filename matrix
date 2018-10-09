@@ -19,6 +19,14 @@
 # from the OSU CS 344 Fall 2018 lectures and assignment hints
 # unless otherwise specifically indicated.
 
+# trap command for the signals listed in the assignment instructions adapted from
+# an OSU CS 344 Piazza post discussion
+trap "trapCommand" INT HUP TERM EXIT
+
+trapCommand(){
+rm -f *.tmp
+}
+
 dims(){
 # NAME
 # dims - figure out dimensions of a given matrix
