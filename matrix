@@ -435,7 +435,7 @@ done
 multSum=0
 multResultsFile="multresults$$"
 tempMult=0
-counter=1
+counter=0
 transposedCols="$(head -1 $transposedRightInput | tr '\t' '\n' | wc -l)"
 while read leftMatrixLineMult
 do
@@ -454,15 +454,18 @@ do
 		done
 		(( counter = counter + 1 ))
 		echo -e -n "$multSum" >> $multResultsFile
-		if [ $counter -lt $transposedCols ]
+		if [ $counter -lt $rightColsMult ]
 		then
-			echo -n -e "\t"
+			echo -n -e "\t" >> $multResultsFile
 		else
-			echo
+			echo >> $multResultsFile
 		fi
 		(( multSum = 0 ))
 	done < $transposedRightInput
+	(( counter = 0 ))
 done < $leftMultInput
+
+cat $multResultsFile
 
 #i=1
 #while read leftMatrixLineMult <&3 && read rightMatrixLineMult <&4
@@ -507,10 +510,10 @@ fi
 #fi
 
 #
-#if [[ -a multresults$$ ]]
-#then
-#	rm -f multresults$$
-#fi
+if [[ -a multresults$$ ]]
+then
+	rm -f multresults$$
+fi
 }
 
 # check for correct number of arguments (1 or 2 for dims, transpose, and mean since they can also take stdin, and 3 for
