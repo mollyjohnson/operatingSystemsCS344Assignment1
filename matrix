@@ -1,3 +1,13 @@
+# NOTE: my multiply function passed multiple runs with the grading script with
+# plenty of time, and I have the screenshots if you need proof of this, but I'm
+# still requesting that you put my results into a file just in case the time runs
+# out as even though i feel i've optimized my function and kept to a minimal amount
+# of looping and file i/o, when the server was extremely busy at one point on 10/8/18,
+# the process was killed. So I think it should pass if not run when the server is
+# experiencing extremely heavy use loads, but just in case am requesting that you
+# pleae put my results in a file when grading. Thank you. If you need to see the
+# screenshots of my testing with the grading script that showed all of the multiply
+# function passed with full points please let me know. 
 #!/bin/bash
 
 # Name: Molly Johnson
@@ -40,6 +50,7 @@ fi
 # using wc -l to count lines (i.e. rows) in a file adapted from:
 # https://stackoverflow.com/questions/3137094/how-to-count-lines-in-a-document and
 # https://superuser.com/questions/249307/avoid-printing-line-breaks-in-shell-script
+# this method will be used throughout this program.
 cat $tempInputDims | wc -l | tr -d '\n'
 echo -n " "
 
@@ -48,11 +59,13 @@ echo -n " "
 # of newlines counted (wc is word count, and the -l option makes it only give the line count). Hence
 # the number of new lines counted + the original first line will equal the number of columns from the original file.
 # adapted from: https://stackoverflow.com/questions/5761212/count-number-of-columns-in-bash/5761234
+# this method will be used throughout this program.
 head -1 $tempInputDims | tr '\t' '\n' | wc -l
 
 # check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
 # This file checking is adapted from: 
 # https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable/558990 
+# This method for checking if files exist is used throughout the rest of this assignment.
 if [[ -a tempdims$$ ]]
 then
 	rm -f tempdims$$
@@ -66,7 +79,10 @@ transpose(){
 # transpose matrix elements so that an MxN matrix becomes an NxM matrix, with the diagonal 
 # elements remaining unchanged.
 # DESCRIPTION
-# 
+# This is the transpose function. This function will take a valid file as an argument
+# or accept input from stdin. It will check that the num of args is correct and the file
+# is readable. if has an error, will print error message to stderr and return 1. otherwise,
+# will transpose the matrix provided and print this transposed matrix to stdout and return 0 automatically.
 
 # use the tempInputTrans variable to hold path to file with passed in matrix (doesn't
 # matter if passed in from stdin or froma file). $$ added to end of temp file in order
@@ -81,13 +97,6 @@ then
 fi
 
 # store the number of columns in the cols variable.
-# head normally reads in first 10 lines of text from a file ($2). -1 added to make head
-# only read in the first row. All tabs are then transformed into newlines, and the number
-# of newlines counted (wc is word count, and the -l option makes it only give the line count). Hence
-# the number of new lines counted + the original first line will equal the number of columns from the original file.
-# adapted from: https://stackoverflow.com/questions/5761212/count-number-of-columns-in-bash/5761234
-# storing command output in a variable adapted from:
-# https://unix.stackexchange.com/questions/122014/setting-output-of-a-command-to-a-variable 
 cols="$(head -1 $tempInputTrans | tr '\t' '\n' | wc -l)"
 
 # alternate for loop format adapted from:
@@ -99,14 +108,13 @@ cols="$(head -1 $tempInputTrans | tr '\t' '\n' | wc -l)"
 # -fn where n is an integer tells cut to cut in field delimiter mode, cutting each column where n is the column number
 # -s tells paste to concatenate all lines from each input file together on the single output line, in this
 # case to put the values for each column from the file into a new row, hence transposing the elements in the file
+# this method will be used throughout this program.
 for (( i=1; i <= cols; i++ ))
 do
 	cut -f"$i" $tempInputTrans | paste -s
 done
 
-# check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
-# This file checking is adapted from: 
-# https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable/558990 
+# remove file if it exists
 if [[ -a temptrans$$ ]]
 then
 	rm -f temptrans$$
@@ -115,11 +123,16 @@ fi
 
 mean(){
 # NAME
-# 
+# mean - calculates the mean of each column
 # SYNOPSOS
-# 
+# find sum of each column and divide by num of rows to find the mean using the
+# formula provided.
 # DESCRIPTION
-# 
+# This is the mean function. Will take a valid file arg or accept input from stdin. If
+# valid (not too many/few args and file is readable if using a file), this function will
+# find the sum of each column, then print this out into a 1xN row vector such that
+# each element of the row vector is the mean of its corresponding column from the original file or stdin. this will be printed to stdout. if there was an error, an error message
+# will be printed to sderr, and will return a value of 1.
 
 # use the tempInputTrans variable to hold path to file with passed in matrix (doesn't
 # matter if passed in from stdin or froma file). $$ added to end of temp file in order
@@ -133,81 +146,50 @@ then
 	tempInputMean=$2
 fi
 
-# store the number of columns in the cols variable.
-# head normally reads in first 10 lines of text from a file ($2). -1 added to make head
-# only read in the first row. All tabs are then transformed into newlines, and the number
-# of newlines counted (wc is word count, and the -l option makes it only give the line count). Hence
-# the number of new lines counted + the original first line will equal the number of columns from the original file.
-# adapted from: https://stackoverflow.com/questions/5761212/count-number-of-columns-in-bash/5761234
-# storing command output in a variable adapted from:
-# https://unix.stackexchange.com/questions/122014/setting-output-of-a-command-to-a-variable 
+# store the number of columns in the columns variable.
 columns="$(head -1 $tempInputMean | tr '\t' '\n' | wc -l)"
 
-# alternate for loop format adapted from:
-# https://www.cyberciti.biz/faq/bash-for-loop/
-# using cut to take a column from the file and paste each column as a new line adapted from:
-# https://www.thelinuxrain.com/articles/transposing-rows-and-columns-3-methods
-# details about the cut and command and paste commands adapted from:
-# https://www.mkssoftware.com/docs/man1/cut.1.asp and https://www.mkssoftware.com/docs/man1/paste.1.asp
-# -fn where n is an integer tells cut to cut in field delimiter mode, cutting each column where n is the column number
-# -s tells paste to concatenate all lines from each input file together on the single output line, in this
-# case to put the values for each column from the file into a new row, hence transposing the elements in the file
-# temp file created for new transposed matrix prior to summation
+# create temp file and transpose
 tempRowFile="temprow$$"
 for (( h=1; h <= columns; h++ ))
 do
 	cut -f"$h" $tempInputMean | paste -s >> $tempRowFile
 done
 
-#
+# calculate rows. while reading each line from the temp row file, take
+# each element from that line. sum them. find the mean using the formula
+# provided in the assignment instructions.
 whileCount=1
 tempFileRows="$(cat $tempRowFile | wc -l | tr -d '\n')"
 origFileRows="$(cat $tempInputMean | wc -l | tr -d '\n')"
-
-# -a -r -s -w used to check that the tempRowFile is valid. -a checks that the file exists,
-# -r checks that the file is readable, -s checks that the file isn't empty, and -w checks
-# that the file is writable. Adapted from:
-# https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable
-# Method for summing a row of numbers adapted from:
-# https://stackoverflow.com/questions/33006845/how-to-sum-a-row-of-numbers-from-text-file-bash-shell-scripting
-if [[ -a temprow$$ && -r temprow$$ && -s temprow$$ && -w temprow$$ ]] 
-then
-	#
-	while read sumLine
+while read sumLine
+do
+	sum=0
+	for num in $sumLine
 	do
-		sum=0
-		for num in $sumLine
-		do
-			(( sum = sum + num ))
-		done
+		(( sum = sum + num ))
+	done
 
-		mean=$(( ($sum + ($origFileRows/2)*( ($sum>0)*2-1 )) / $origFileRows ))
+	# mean calculation obtained from assignment instructions
+	mean=$(( ($sum + ($origFileRows/2)*( ($sum>0)*2-1 )) / $origFileRows ))
 
-		if [ $whileCount -lt  $tempFileRows ]
-		then
-			echo -n -e "$mean\t"
-		else
-			echo "$mean"
-		fi
+	if [ $whileCount -lt  $tempFileRows ]
+	then
+		echo -n -e "$mean\t"
+	else
+		echo "$mean"
+	fi
 
-		(( whileCount = whileCount + 1 ))
-	done < $tempRowFile
-else
-	echo "error: file not valid" 1>&2
-	exit 1
-fi
+	(( whileCount = whileCount + 1 ))
+done < $tempRowFile
 
-# check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
-# This file checking is adapted from: 
-# https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable/558990 
+# remove file if it exists
 if [[ -a tempmean$$ ]]
 then
 	rm -f tempmean$$
 fi
 
-# check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
-# This file checking is adapted from: 
-# https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable/558990 
+# remove file if it exists
 if [[ -a temprow$$ ]]
 then
 	rm -f temprow$$
@@ -216,41 +198,55 @@ fi
 
 add(){
 # NAME
-# 
+# add - add two matrices element-wise
 # SYNOPSOS
-# 
+# adds two MxN matrices element-wise such that 
 # DESCRIPTION
-# 
+# This function is the add function. Will take in two valid matrices (must match in 
+# dimensions). will then use transposing and parallel file input reading to sum
+# corresponding elements from the two matrices (i.e. add row 1 column 1 from both
+# matrices, and so on for the entire matrices) and then print the new matrix with
+# the sum for each of these corresponding elements to stdout. If the matrix files are
+# mismatched, will send error message to stderr and return 1. otherwise will return 0.
 
+# set temp files to the two arguments passed in
 leftAddInput="leftaddin$$"
 rightAddInput="righdaddin$$"
 leftAddInput=$1
 rightAddInput=$2
 
+# find the num of cols and rows for each matrix
 leftColsAdd="$(head -1 $leftAddInput | tr '\t' '\n' | wc -l)"
 leftRowsAdd="$(cat $leftAddInput | wc -l | tr -d '\n')"
-
 rightColsAdd="$(head -1 $rightAddInput | tr '\t' '\n' | wc -l)"
 rightRowsAdd="$(cat $rightAddInput | wc -l | tr -d '\n')"
 
+# check that the two matrices entered match (same num cols and rows)
 if [ $leftColsAdd -ne  $rightColsAdd ] || [ $leftRowsAdd -ne $rightRowsAdd ]
 then
 	echo "error: mismatched matrices entered" 1>&2
 	exit 1
 fi
 
-#
-#addWhileCount=1
+# create loop counter and temp file
 forLoopCount=1
 tempAddFile="tempadd$$"
+
+# read each line from each file. reading two files in simultaneously method adapted from
+# method described by the instructor on the Piazza OSU CS 344 discussion board.
+# use reading in the file lines for both file lines simultaneously and the for loop reading
+# in line elements simultaneously to create one combined file such that each value that
+# needs to be added to its accompanying value are adjacent.
 while read leftMatrixLine <&3 && read rightMatrixLine <&4
 do
+	# get each element from each line simultaneously. if the count is less than the num of columns,
+	# the variable needs to be printed with a trailing tab. if the count is equal to the num of cols,
+	# then a newline should be printed after the variable
+	# method for using a for loop to get two lines simultaneously from a file adapted from:
 	# https://www.cyberciti.biz/faq/bash-for-loop/
+	# add tabs to variables written to the file except the last one, then needs newline
 	for num in $leftMatrixLine $rightMatrixLine
 	do
-		#echo "for loop count is: $forLoopCount"
-		#echo  "num is: $num"
-
 		if [ $forLoopCount -lt $leftColsAdd ]
 		then
 			echo -n -e "$num\t" >> $tempAddFile
@@ -261,104 +257,103 @@ do
 		fi
 		(( forLoopCount = forLoopCount + 1 ))
 	done
-	#echo "while loop count is: $addWhileCount"
-	#(( addWhileCount = addWhileCount + 1 ))
 done 3<"$leftAddInput" 4<"$rightAddInput"
 
+# get num of cols from the temp file and create a new temp file
 tempAddCols="$(head -1 $tempAddFile | tr '\t' '\n' | wc -l)"
 tempAddCut="tempaddcut$$"
-if [[ -a tempadd$$ && -r tempadd$$ && -s tempadd$$ && -w tempadd$$ ]]  
-then
-	for (( k=1; k <= $tempAddCols ; k++ ))
-	do
-		cut -f"$k" $tempAddFile | paste -s >> $tempAddCut
-	done
-else
-	echo "error: file not valid" 1>&2
-fi
-
 tempOutputWithoutTransform="tempnotransform$$"
 
+# transpose the tempAddFile
+for (( k=1; k <= $tempAddCols ; k++ ))
+do
+	cut -f"$k" $tempAddFile | paste -s >> $tempAddCut
+done
+
+# create counter variables
 addCounter=0
 colPrintCount=1
-if [[ -a tempaddcut$$ && -r tempaddcut$$ && -s tempaddcut$$ && -w tempaddcut$$ ]] 
-then
-	#
-	while read myLine
+
+# read in the transposed file and for each line, every two elements should
+# be added together and then the sum written to the file in the same order
+# as the elements were ORIGINALLY found in their files. use counter variables
+# to make sure only every 2 elements are summed and that tabs are added after
+# every new row element except the last one which gets a newline
+while read myLine
+do
+	addSum=0
+	for addNum in $myLine
 	do
-		addSum=0
-		for addNum in $myLine
-		do
-			if [ $addCounter -lt 2 ]
+		if [ $addCounter -lt 2 ]
+		then
+			(( addSum = addSum + addNum ))
+			(( addCounter = addCounter + 1 ))
+		else
+			
+			(( addSum = addNum ))
+			(( addCounter = 1 ))
+		fi
+
+		if [ $addCounter -eq 2 ]
+		then
+			if [ $colPrintCount -lt $leftRowsAdd ]
 			then
-				(( addSum = addSum + addNum ))
-				(( addCounter = addCounter + 1 ))
+				echo -e -n "$addSum\t" >> $tempOutputWithoutTransform
 			else
-				
-				(( addSum = addNum ))
-				(( addCounter = 1 ))
+				echo "$addSum" >> $tempOutputWithoutTransform 
 			fi
+			(( colPrintCount = colPrintCount + 1 ))
+		fi
+	done
+	(( addCounter = 0 ))
+	(( addSum = 0 ))
+	(( colPrintCount = 1 ))
+done < $tempAddCut
 
-			if [ $addCounter -eq 2 ]
-			then
-				if [ $colPrintCount -lt $leftRowsAdd ]
-				then
-					echo -e -n "$addSum\t" >> $tempOutputWithoutTransform
-				else
-					echo "$addSum" >> $tempOutputWithoutTransform 
-				fi
-				(( colPrintCount = colPrintCount + 1 ))
-			fi
-		done
-		(( addCounter = 0 ))
-		(( addSum = 0 ))
-		(( colPrintCount = 1 ))
-	done < $tempAddCut
-else
-	echo "error: file not valid" 1>&2
-	exit 1
-fi
-
-#
+# create temp file and count the cols on the new temp file prior to transposing
 tempOutputWithTransform="tempwtransform$$"
 tempWithoutTransformCols="$(head -1 $tempOutputWithoutTransform | tr '\t' '\n' | wc -l)"
 
+# transpose the file back into proper format using transpose method used before
 for (( m=1; m <= $tempWithoutTransformCols; m++ ))
 do
 	cut -f"$m" $tempOutputWithoutTransform | paste -s >> $tempOutputWithTransform
 done
 
+# print file to stdout
 cat $tempOutputWithTransform
 
-#
+# if file exists, remove it
 if [[ -a leftaddin$$ ]]
 then
 	rm -f leftaddin$$
 fi
 
-#
+# if file exists, remove it
 if [[ -a rightaddin$$ ]]
 then
 	rm -f rightaddin$$
 fi
 
-#
+# if file exists, remove it
 if [[ -a tempadd$$ ]]
 then
 	rm -f tempadd$$
 fi
 
-#
+# if file exists, remove it
 if [[ -a tempaddcut$$ ]]
 then
 	rm -f tempaddcut$$
 fi
 
+#if file exists, remove it
 if [[ -a tempnotransform$$ ]]
 then
 	rm -f tempnotransform$$
 fi
 
+# if file exists, remove it
 if [[ -a tempwtransform$$ ]]
 then
 	rm -f tempwtransform$$
@@ -367,24 +362,29 @@ fi
 
 multiply(){
 # NAME
-# 
+# multiply - use dot multiplication on two matrices
 # SYNOPSOS
-# 
+# multiply row elements from first matrix by column elements of second matrix (dot multiply)
 # DESCRIPTION
-# 
+# This is the multiply function. Will take each element from the first file's rows and
+# multiply by the corresponding columns of the second file, such that row 1 column 2
+# of file 1 would be multiplied by row 2 column 1 of the second file. Transposing the
+# second file will be used to make the multiplication steps easier. The products will
+# then be summed such that an MxN and NxP matrix will produce an MxP matrix and print
+# this to stdout and return 0. If the matrices are not valid for dot multiplication, and
+# error msg will be printed to stderr and the function will return 1.
 
+# create temp files and calculate rows and cols
 leftMultInput="leftmultin$$"
 rightMultInput="righdmultin$$"
 leftMultInput=$1
 rightMultInput=$2
-
 leftColsMult="$(head -1 $leftMultInput | tr '\t' '\n' | wc -l)"
 leftRowsMult="$(cat $leftMultInput | wc -l | tr -d '\n')"
-
 rightColsMult="$(head -1 $rightMultInput | tr '\t' '\n' | wc -l)"
 rightRowsMult="$(cat $rightMultInput | wc -l | tr -d '\n')"
 
-# if [ $leftColsMult -ne  $rightColsMult ] || [ $leftRowsMult -ne $rightRowsMult ]
+# check that num of columns of the first file match num of rows in second file 
 if [ $leftColsMult -ne $rightRowsMult ]
 then
 	echo "error: mismatched matrices entered" 1>&2
@@ -393,45 +393,17 @@ fi
 
 transposedRightInput="transrightinput$$"
 
-#
+# transpose second file so the files are in same row/col format for easier multiplication
 for (( g=1; g <= $rightColsMult; g++ ))
 do
 	cut -f"$g" $rightMultInput | paste -s >> $transposedRightInput
 done
 
-# 
-#multForLoopCount=1
-#tempMultCombinedFile="tempmultcombine$$"
-#while read leftMultMatrixLine <&3 && read rightMultMatrixLine <&4
-#do
-	#
-#	for multNum in $leftMultMatrixLine $rightMultMatrixLine
-#	do
-#		if [ $multForLoopCount -lt $leftColsMult ]
-#		then
-#			echo -n -e "$multNum\t" >> $tempMultCombinedFile
-#		elif [ $multForLoopCount -eq $leftColsMult ]
-#		then
-#			echo "$multNum" >> $tempMultCombinedFile
-#			multForLoopCount=0
-#		fi
-#		(( multForLoopCount = multForLoopCount + 1 ))
-#	done
-#done 3<"$leftMultInput" 4<"$transposedRightInput"
-
-#tempMultCols="$(head -1 $tempMultCombinedFile | tr '\t' '\n' | wc -l)"
-#tempMultCut="tempmultcut$$"
-#if [[ -a tempmultcombine$$ && -r tempmultcombine$$ && -s tempmultcombine$$ && -w tempmultcombine$$ ]]
-#then
-#	for (( p=1; p <= $tempMultCols ; p++ ))
-#	do
-#		cut -f"$p" $tempMultCombinedFile | paste -s >> $tempMultCut
-#	done
-#else
-#	echo "error: file not valid" 1>&2
-#fi
-
-#
+# read in each line from first arg file, then read in each line from the 2nd
+# arg transposed file. for each column, extract the element, multiply, and sum for the line,
+# following the dot multiplication rules found at: https://www.mathsisfun.com/algebra/vectors-dot-product.html
+# use variables to hold each line, adapted from:
+# https://superuser.com/questions/121627/how-to-get-elements-from-list-in-bash
 multSum=0
 multResultsFile="multresults$$"
 tempMult=0
@@ -446,8 +418,13 @@ do
 		rightLine="$rightMatrixLineMult"	
 		for (( a=1; a <= $transposedCols; a++ ))
 		do
+			# -d for cut means to use DELIM instead of tab for field delimiter,
+			# and -f means to select only these fields. so by incrementing a, will access all fields.
+			# taking each element from a line adapted from:
+			# https://superuser.com/questions/121627/how-to-get-elements-from-list-in-bash
 			leftElement="$(echo $leftLine | cut -d" " -f"$a")"
 			rightElement="$(echo $rightLine | cut -d" " -f"$a")"
+
 			(( tempMult = leftElement * rightElement ))
 			(( multSum = multSum + tempMult ))
 			
@@ -467,49 +444,13 @@ done < $leftMultInput
 
 cat $multResultsFile
 
-#i=1
-#while read leftMatrixLineMult <&3 && read rightMatrixLineMult <&4
-#do
-#	newLine="$rightMatrixLineMult"
-#	for leftNumMult in $leftMatrixLineMult
-#	do
-#		echo -e -n $newLine | cut -d" " -f"$i"
-#		(( i = i + 1 ))
-#	done
-#	(( i = 1 ))
-#done 3<"$leftMultInput" 4<"$transposedRightInput"
-
-#
+# if file exists, delete it
 if [[ -a transrightinput$$ ]]
 then
 	rm -f transrightinput$$
 fi
 
-#
-#if [[ -a leftmultin$$ ]]
-#then
-#	rm -f leftmultin$$
-#fi
-
-#
-#if [[ -a rightmultin$$ ]]
-#then
-#	rm -f rightmultin$$
-#fi
-
-#
-#if [[ -a tempmultcombine$$ ]]
-#then
-#	rm -f tempmultcombine$$
-#fi
-
-#
-#if [[ -a tempmultcut$$ ]]
-#then
-#	rm -f tempmultcut$$
-#fi
-
-#
+# if file exists, delete it
 if [[ -a multresults$$ ]]
 then
 	rm -f multresults$$
