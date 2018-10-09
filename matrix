@@ -20,8 +20,8 @@
 # unless otherwise specifically indicated.
 
 # trap command for the signals listed in the assignment instructions adapted from
-# an OSU CS 344 Piazza post discussion
-trap "trapCommand" INT HUP TERM EXIT
+# an OSU CS 344 Piazza post discussion. Signals are: INT is for interrupt, HUP is for hangup, and TERM is for terminate
+trap "trapCommand" INT HUP TERM
 
 trapCommand(){
 rm -f *.tmp
