@@ -1,3 +1,4 @@
+#!/bin/bash
 # NOTE: my multiply function passed multiple runs with the grading script with
 # plenty of time, and I have the screenshots if you need proof of this, but I'm
 # still requesting that you put my results into a file just in case the time runs
@@ -8,7 +9,6 @@
 # pleae put my results in a file when grading. Thank you. If you need to see the
 # screenshots of my testing with the grading script that showed all of the multiply
 # function passed with full points please let me know. 
-#!/bin/bash
 
 # Name: Molly Johnson
 # ONID: johnsmol
