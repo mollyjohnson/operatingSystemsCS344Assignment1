@@ -34,7 +34,7 @@ dims(){
 # use the tempInputDims variable to hold path to file with passed in matrix (doesn't
 # matter if passed in from stdin or froma file). $$ added to end of temp file in order
 # to prevent any duplicate names being used again mistakenly
-tempInputDims="tempdims$$"
+tempInputDims="tempdims$$.tmp"
 if [ "$#" = "1" ]
 then
 	cat > "$tempInputDims"
@@ -61,15 +61,6 @@ echo -n " "
 # adapted from: https://stackoverflow.com/questions/5761212/count-number-of-columns-in-bash/5761234
 # this method will be used throughout this program.
 head -1 $tempInputDims | tr '\t' '\n' | wc -l
-
-# check to see if the tempfile exists using -a. if it does exist, remove it. otherwise do nothing.
-# This file checking is adapted from: 
-# https://askubuntu.com/questions/558977/checking-for-a-file-and-whether-it-is-readable-and-writable/558990 
-# This method for checking if files exist is used throughout the rest of this assignment.
-if [[ -a tempdims$$ ]]
-then
-	rm -f tempdims$$
-fi
 }
 
 transpose(){
@@ -87,7 +78,7 @@ transpose(){
 # use the tempInputTrans variable to hold path to file with passed in matrix (doesn't
 # matter if passed in from stdin or froma file). $$ added to end of temp file in order
 # to prevent any duplicate names being used again mistakenly
-tempInputTrans="temptrans$$"
+tempInputTrans="temptrans$$.tmp"
 if [ "$#" = "1" ]
 then
 	cat > "$tempInputTrans"
@@ -113,12 +104,6 @@ for (( i=1; i <= cols; i++ ))
 do
 	cut -f"$i" $tempInputTrans | paste -s
 done
-
-# remove file if it exists
-if [[ -a temptrans$$ ]]
-then
-	rm -f temptrans$$
-fi
 }
 
 mean(){
@@ -131,13 +116,14 @@ mean(){
 # This is the mean function. Will take a valid file arg or accept input from stdin. If
 # valid (not too many/few args and file is readable if using a file), this function will
 # find the sum of each column, then print this out into a 1xN row vector such that
-# each element of the row vector is the mean of its corresponding column from the original file or stdin. this will be printed to stdout. if there was an error, an error message
+# each element of the row vector is the mean of its corresponding column from the original file or stdin. 
+# this will be printed to stdout. if there was an error, an error message
 # will be printed to sderr, and will return a value of 1.
 
 # use the tempInputTrans variable to hold path to file with passed in matrix (doesn't
 # matter if passed in from stdin or froma file). $$ added to end of temp file in order
 # to prevent any duplicate names being used again mistakenly
-tempInputMean="tempmean$$"
+tempInputMean="tempmean$$.tmp"
 if [ "$#" = "1" ]
 then
 	cat > "$tempInputMean"
@@ -150,7 +136,7 @@ fi
 columns="$(head -1 $tempInputMean | tr '\t' '\n' | wc -l)"
 
 # create temp file and transpose
-tempRowFile="temprow$$"
+tempRowFile="temprow$$.tmp"
 for (( h=1; h <= columns; h++ ))
 do
 	cut -f"$h" $tempInputMean | paste -s >> $tempRowFile
@@ -182,18 +168,6 @@ do
 
 	(( whileCount = whileCount + 1 ))
 done < $tempRowFile
-
-# remove file if it exists
-if [[ -a tempmean$$ ]]
-then
-	rm -f tempmean$$
-fi
-
-# remove file if it exists
-if [[ -a temprow$$ ]]
-then
-	rm -f temprow$$
-fi
 }
 
 add(){
@@ -210,8 +184,8 @@ add(){
 # mismatched, will send error message to stderr and return 1. otherwise will return 0.
 
 # set temp files to the two arguments passed in
-leftAddInput="leftaddin$$"
-rightAddInput="righdaddin$$"
+leftAddInput="leftaddin$$.tmp"
+rightAddInput="righdaddin$$.tmp"
 leftAddInput=$1
 rightAddInput=$2
 
@@ -230,7 +204,7 @@ fi
 
 # create loop counter and temp file
 forLoopCount=1
-tempAddFile="tempadd$$"
+tempAddFile="tempadd$$.tmp"
 
 # read each line from each file. reading two files in simultaneously method adapted from
 # method described by the instructor on the Piazza OSU CS 344 discussion board.
@@ -261,8 +235,8 @@ done 3<"$leftAddInput" 4<"$rightAddInput"
 
 # get num of cols from the temp file and create a new temp file
 tempAddCols="$(head -1 $tempAddFile | tr '\t' '\n' | wc -l)"
-tempAddCut="tempaddcut$$"
-tempOutputWithoutTransform="tempnotransform$$"
+tempAddCut="tempaddcut$$.tmp"
+tempOutputWithoutTransform="tempnotransform$$.tmp"
 
 # transpose the tempAddFile
 for (( k=1; k <= $tempAddCols ; k++ ))
@@ -311,7 +285,7 @@ do
 done < $tempAddCut
 
 # create temp file and count the cols on the new temp file prior to transposing
-tempOutputWithTransform="tempwtransform$$"
+tempOutputWithTransform="tempwtransform$$.tmp"
 tempWithoutTransformCols="$(head -1 $tempOutputWithoutTransform | tr '\t' '\n' | wc -l)"
 
 # transpose the file back into proper format using transpose method used before
@@ -322,42 +296,6 @@ done
 
 # print file to stdout
 cat $tempOutputWithTransform
-
-# if file exists, remove it
-if [[ -a leftaddin$$ ]]
-then
-	rm -f leftaddin$$
-fi
-
-# if file exists, remove it
-if [[ -a rightaddin$$ ]]
-then
-	rm -f rightaddin$$
-fi
-
-# if file exists, remove it
-if [[ -a tempadd$$ ]]
-then
-	rm -f tempadd$$
-fi
-
-# if file exists, remove it
-if [[ -a tempaddcut$$ ]]
-then
-	rm -f tempaddcut$$
-fi
-
-#if file exists, remove it
-if [[ -a tempnotransform$$ ]]
-then
-	rm -f tempnotransform$$
-fi
-
-# if file exists, remove it
-if [[ -a tempwtransform$$ ]]
-then
-	rm -f tempwtransform$$
-fi
 }
 
 multiply(){
@@ -375,8 +313,8 @@ multiply(){
 # error msg will be printed to stderr and the function will return 1.
 
 # create temp files and calculate rows and cols
-leftMultInput="leftmultin$$"
-rightMultInput="righdmultin$$"
+leftMultInput="leftmultin$$.tmp"
+rightMultInput="righdmultin$$.tmp"
 leftMultInput=$1
 rightMultInput=$2
 leftColsMult="$(head -1 $leftMultInput | tr '\t' '\n' | wc -l)"
@@ -391,7 +329,7 @@ then
 	exit 1
 fi
 
-transposedRightInput="transrightinput$$"
+transposedRightInput="transrightinput$$.tmp"
 
 # transpose second file so the files are in same row/col format for easier multiplication
 for (( g=1; g <= $rightColsMult; g++ ))
@@ -405,7 +343,7 @@ done
 # use variables to hold each line, adapted from:
 # https://superuser.com/questions/121627/how-to-get-elements-from-list-in-bash
 multSum=0
-multResultsFile="multresults$$"
+multResultsFile="multresults$$.tmp"
 tempMult=0
 counter=0
 transposedCols="$(head -1 $transposedRightInput | tr '\t' '\n' | wc -l)"
@@ -443,18 +381,6 @@ do
 done < $leftMultInput
 
 cat $multResultsFile
-
-# if file exists, delete it
-if [[ -a transrightinput$$ ]]
-then
-	rm -f transrightinput$$
-fi
-
-# if file exists, delete it
-if [[ -a multresults$$ ]]
-then
-	rm -f multresults$$
-fi
 }
 
 # check for correct number of arguments (1 or 2 for dims, transpose, and mean since they can also take stdin, and 3 for
@@ -506,3 +432,7 @@ else
 	echo "error: invalid number of arguments" 1>&2
 	exit 1
 fi
+
+# idea to add .tmp to all files to make them easy to remove when script completes normally adapted
+# from OSU CS 344 Piazza post/slack discussion
+rm -f *.tmp
