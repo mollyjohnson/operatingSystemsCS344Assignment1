@@ -3,7 +3,7 @@
 # plenty of time, and I have the screenshots if you need proof of this, but I'm
 # still requesting that you put my results into a file just in case the time runs
 # out as even though i feel i've optimized my function and kept to a minimal amount
-# of looping and file i/o, when the server was extremely busy at one point on 10/8/18,
+# of looping and file i/o, when the server was extremely busy at one point,
 # the process was killed. So I think it should pass if not run when the server is
 # experiencing extremely heavy use loads, but just in case am requesting that you
 # pleae put my results in a file when grading. Thank you. If you need to see the
@@ -12,12 +12,14 @@
 
 # Name: Molly Johnson
 # ONID: johnsmol
-# CS 344 Fall 2018
-# Due: 10/8/18
+# CS 344 Winter 2019
+# Due: 1/28/18
 # Assignment 1
 # All information used to implement this script is adapted
-# from the OSU CS 344 Fall 2018 lectures and assignment hints
-# unless otherwise specifically indicated.
+# from the OSU CS 344 Winter 2019 lectures and assignment hints
+# unless otherwise specifically indicated. Also adapted from my own
+# work previoulsy created on 10/8/18 (I took the class previously in the Fall 2018
+# term but am retaking for a better grade). 
 
 # trap command for the signals listed in the assignment instructions adapted from
 # an OSU CS 344 Piazza post discussion. Signals are: INT is for interrupt, HUP is for hangup, and TERM is for terminate
